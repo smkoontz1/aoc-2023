@@ -6,6 +6,6 @@
 // day2.PartTwo();
 
 var day3 = new Day3();
-day3.PartOne();
+day3.PartTwo();
 
 Console.ReadLine();
