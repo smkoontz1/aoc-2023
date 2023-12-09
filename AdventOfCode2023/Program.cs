@@ -7,3 +7,5 @@
 
 var day3 = new Day3();
 day3.PartOne();
+
+Console.ReadLine();

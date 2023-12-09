@@ -1,4 +1,5 @@
 
+using AdventOfCode2023.Day3.Models;
 using System.Text.RegularExpressions;
 
 public class Day3
@@ -8,7 +9,7 @@ public class Day3
         var testFile = "Day3/Day3TestInput.txt";
         var inputFile = "Day3/Day3Input.txt";
 
-        var lines = FileReader.GetLines(testFile);
+        var lines = FileReader.GetLines(inputFile);
         
         var partNumberSum = 0;
 
@@ -21,15 +22,18 @@ public class Day3
             string? prevRow = rowIndex > 0 ? lines[rowIndex - 1] : null;
             string? nextRow = rowIndex < rowCount - 1 ? lines[rowIndex + 1] : null;
 
+            var numChars = new List<char>();
+            int? numStartIndex = null;
+            int? numEndIndex = null;
+            
             for (var charIndex = 0; charIndex < currRow.Length; charIndex++)
             {
                 var currChar = currRow[charIndex];
+                var isLastChar = charIndex == currRow.Length - 1;
 
-                var numChars = new List<char>();
-                int? numStartIndex = null;
-                int? numEndIndex = null;
+                var isNum = int.TryParse(currChar.ToString(), out _);
 
-                if (int.TryParse(currChar.ToString(), out _))
+                if (isNum)
                 {
                     if (!numChars.Any())
                     {
@@ -38,11 +42,12 @@ public class Day3
 
                     numChars.Add(currChar);
                 }
-                else
+
+                if (!isNum || (isNum && isLastChar))
                 {
                     if (numChars.Any())
                     {
-                        numEndIndex = charIndex - 1;
+                        numEndIndex = isLastChar ? charIndex : charIndex - 1;
 
                         var isPartNumber = IsPartNumber(
                             numStartIndex.Value,
@@ -68,6 +73,27 @@ public class Day3
         Console.WriteLine($"Part number sum: {partNumberSum}");
     }
 
+    public void PartTwo()
+    {
+        var testFile = "Day3/Day3TestInput.txt";
+        var inputFile = "Day3/Day3Input.txt";
+
+        var lines = FileReader.GetLines(inputFile);
+        var rowCount = lines.Length;
+
+        var potGearCounter = new Dictionary<PotGearCoordinate, int>();
+
+        for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
+        {
+            var currRow = lines[rowIndex];
+
+            for (var charIndex = 0; charIndex < currRow.Length; charIndex++)
+            {
+                var currChar = currRow[charIndex];
+            }
+        }
+    }
+
     private bool IsPartNumber(
         int numStartIndex,
         int numEndIndex,
@@ -87,7 +113,7 @@ public class Day3
             var prevRowCheckSection = prevRow.Substring(checkSectionStartIndex, checkSectionLength);
 
             var prevRowMatch = symbolRegex.Match(prevRowCheckSection);
-            if (prevRowMatch is not null)
+            if (prevRowMatch.Success)
             {
                 return true;
             }
@@ -109,7 +135,7 @@ public class Day3
         }
 
         var currRowMatch = symbolRegex.Match(currRowCheckSection);
-        if (currRowMatch is not null)
+        if (currRowMatch.Success)
         {
             return true;
         }
@@ -120,7 +146,7 @@ public class Day3
             var nextRowCheckSection = nextRow.Substring(checkSectionStartIndex, checkSectionLength);
 
             var nextRowMatch = symbolRegex.Match(nextRowCheckSection);
-            if (nextRowMatch is not null)
+            if (nextRowMatch.Success)
             {
                 return true;
             }
