@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 public static class FileReader
 {
     public static string[] GetLines(string filename)
